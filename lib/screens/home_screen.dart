@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/models/article_model.dart';
+import 'package:news_app/widgets/custom_tag.dart';
 
 import '../widgets/bottom_nav_bar.dart';
+import '../widgets/image_container.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -10,6 +12,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var article = Article.articles[0];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -24,29 +28,43 @@ class HomeScreen extends StatelessWidget {
       bottomNavigationBar: BottomNavBar(index: 0),
       body: ListView(
         padding: EdgeInsets.zero,
-        children: const [
-          ImageContainer()
+        children: [
+          ImageContainer(
+            height: MediaQuery.of(context).size.height * 0.45,
+            width: double.infinity,
+            padding: EdgeInsets.all(20),
+            imageUrl: article.imageUrl,
+            chield: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomTag(
+                  backgroundColor: Colors.grey.withAlpha(150),
+                  children: [
+                    Text(
+                      "News of the day",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Colors.white),
+                    )
+                  ],
+                ),
+                SizedBox(height: 10),
+                Text(
+                  article.title,
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        height: 1.25,
+                      ),
+                ),
+                TextButton(onPressed: (){}, child: Text(""))
+              ],
+            ),
+          )
         ],
       ),
-    );
-  }
-}
-
-class ImageContainer extends StatelessWidget {
-  const ImageContainer({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.45,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          image: DecorationImage(
-            image: NetworkImage(Article.articles[0].imageUrl),
-            fit: BoxFit.cover,
-          )),
     );
   }
 }
